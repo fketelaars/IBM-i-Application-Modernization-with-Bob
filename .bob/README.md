@@ -1,19 +1,19 @@
 # Bob project customization for IBM i development
 
-This project defines two custom IBM i modes in [`.bob/custom_modes.yaml`](.bob/custom_modes.yaml). [`IBM i Dev`](.bob/custom_modes.yaml) is the general-purpose IBM i mode: use it to explain code, generate new RPG/CL/DDS/SQL/COBOL source, document applications, compile, and work with the same broad tool scope as Advanced. [`IBM i Modernization`](.bob/custom_modes.yaml) is the transformation mode: use it when converting or refactoring legacy assets such as fixed-form RPG to free-form, DDS to SQL DDL, or RPGLE to SQLRPGLE while preserving business behavior. In short, IBM i Dev helps you build, explain, and compile; IBM i Modernization helps you convert and modernize.
+This project defines two custom IBM i modes in [`./custom_modes.yaml`](./custom_modes.yaml). [`IBM i Dev`](./custom_modes.yaml) is the general-purpose IBM i mode: use it to explain code, generate new RPG/CL/DDS/SQL/COBOL source, document applications, compile, and work with the same broad tool scope as Advanced. [`IBM i App Mod`](./custom_modes.yaml) is the transformation mode: use it when converting or refactoring legacy assets such as fixed-form RPG to free-form, DDS to SQL DDL, or RPGLE to SQLRPGLE while preserving business behavior. In short, IBM i Dev helps you build, explain, and compile; IBM i Modernization helps you convert and modernize.
 
-Project rules are stored in [`.bob/rules/ibmi-rpg-standards.md`](.bob/rules/ibmi-rpg-standards.md), [`.bob/rules/ibmi-cl-standards.md`](.bob/rules/ibmi-cl-standards.md), and [`.bob/rules/ibmi-dds-standards.md`](.bob/rules/ibmi-dds-standards.md). These files define the coding conventions, terminology, and safety rules Bob should follow for RPG, CL, and DDS work.
+Project rules are stored in [`./rules/ibmi-rpg-standards.md`](./rules/ibmi-rpg-standards.md), [`./rules/ibmi-cl-standards.md`](./rules/ibmi-cl-standards.md), and [`./rules/ibmi-dds-standards.md`](./rules/ibmi-dds-standards.md). These files define the coding conventions, terminology, and safety rules Bob should follow for RPG, CL, and DDS work.
 
-Use the mode that matches the task, then ask directly for the work to perform. Examples: “Explain this RPG program” or “Compile this CLLE” with IBM i Dev; “Convert this DDS PF to SQL table” or “Modernize this fixed-form RPGLE” with IBM i Modernization. The markdown files in [`.bob/modes/`](.bob/modes/) are reference documentation, while the active mode configuration loaded by Bob is [`.bob/custom_modes.yaml`](.bob/custom_modes.yaml).
+Use the mode that matches the task, then ask directly for the work to perform. Examples: “Explain this RPG program” or “Compile this CLLE” with IBM i Dev; “Convert this DDS PF to SQL table” or “Modernize this fixed-form RPGLE” with IBM i Modernization. The markdown files in [`./modes/`](./modes/) are reference documentation, while the active mode configuration loaded by Bob is [`./custom_modes.yaml`](./custom_modes.yaml).
 
 ## Directory Structure
 
 ```
-.bob/
+./
 ├── README.md                      # This file
 ├── modes/                         # Mode definitions
-│   ├── ibmi-developer.md         # IBM i Developer mode
-│   └── ibmi-modernization.md     # IBM i Modernization mode
+│   ├── ibmi-dev.md         # IBM i Developer mode
+│   └── ibmi-appmod.md      # IBM i Modernization mode
 └── rules/                         # Coding standards
     ├── ibmi-rpg-standards.md     # RPG programming standards
     ├── ibmi-cl-standards.md      # CL programming standards
@@ -23,8 +23,8 @@ Use the mode that matches the task, then ask directly for the work to perform. E
 ## Modes
 
 ### IBM i Developer Mode
-**File:** `modes/ibmi-developer.md`  
-**Slug:** `ibm-i-developer`  
+**File:** `modes/ibmi-dev.md`  
+**Slug:** `ibm-i-dev`  
 **Purpose:** Explain, generate, compile, or document IBM i code
 
 Use this mode for:
@@ -34,8 +34,8 @@ Use this mode for:
 - Documentation generation (inline comments, architecture docs, business rules)
 
 ### IBM i Modernization Mode
-**File:** `modes/ibmi-modernization.md`  
-**Slug:** `ibm-i-modernization`  
+**File:** `modes/ibmi-appmod.md`  
+**Slug:** `ibm-i-appmod`  
 **Purpose:** Convert and refactor IBM i code to modern standards
 
 Use this mode for:
