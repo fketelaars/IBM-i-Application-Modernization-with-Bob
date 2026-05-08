@@ -263,12 +263,14 @@ We use `IBMi_IP` is `localhost` as it we use the ssh tunnel and IBM on Power Vir
 3. Check that `ibmi-mcp-server` and `ibmi-mcp-docs` appear connected in your MCP list
 4. Click on `ibmi-mcp-server`, check the list of tools exposed. 
 
-## Exercise 1: Query System Status (3 minutes)
+## Exercise 1: Swith to a mode, and query System Status (3 minutes)
 
 **Objective**: Select the IBM i-specific AI agent, Use Bob to check your IBM i system's performance.
 
 1. Switch to a mode that can use MCP tools - Advanced or other: 
 ![](./pics/select-ibmi-agent.png)
+
+Note that you can create your own modes. For example, import in your .bob directory 2 custom modes extracted from these [examples](https://github.com/IBM/ibmi-mcp-server/blob/main/.bob/custom_modes.yaml). Once the modes created, Bob should be able to use them. Switch to the `ÌBM i agent`mode.
 
 2. Ask Bob: `"Show me the current system status"`
 3. Bob should execute the `system_status` tool and display:
