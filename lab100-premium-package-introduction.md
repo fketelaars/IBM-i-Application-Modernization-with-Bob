@@ -19,13 +19,15 @@ Source can live on the system or in Git — your choice. Historically, IBM i sou
 > **Key general principles with PPi**: Source can live in the **local workspace** or in **source files in QSYS**. When using PPi, you can keep your files in QSYS if you want to, and use Bob/PPi as an assistant while your developers still use SEU/PDM. **Just because you can doesn't mean you should!**.
 We really encourage you move your source files to the IFS and git, and use QSYS when it makes sense. 
 
-> **Key principle in these Labs**: Source lives in the **local workspace** only. `SAMCOx` contains compiled programs, service programs, and database objects — no source members. `SAMSRC` contains source files of the SAMCO application and is never modified. Compiled objects always target `SAMCOx` — never the shared `SAMCO` library.
+> **Key principle in these Labs**: Source lives in the **local workspace** only. `SAMCOn` contains compiled programs, service programs, and database objects — no source members. `SAMSRC` contains source files of the SAMCO application and is never modified. Compiled objects always target `SAMCOn` — never the shared `SAMCO` library.
+
+The SAMCO application and database has already been built in your `SAMCOn` library so initally you don't have to build it. During the lab, you may need to modify the source code, and if you wish, you can recompile it, here using the Tobi (makei) tool. Of course, in your day to day developer activity, other build tools or scripts could be used. 
 
 | What | Where |
 |------|-------|
 | **Source code** | Local workspace — your Git clone on your workstation (IFS-synchronized). **This is the only place source is edited.** |
 | **Your workspace** | Your own clone of the shared Git repository — Bob reads and writes local files directly |
-| **Compiled objects & database** | Built and stored in **`SAMCOx`** on IBM i — where `x` is your team number (e.g., `SAMCO1`, `SAMCO3`) |
+| **Compiled objects & database** | Built and stored in **`SAMCOn`** on IBM i — where `n` is your team number (e.g., `SAMCO1`, `SAMCO3`) |
 | **`SAMSRC` library** | Original read-only source members on IBM i — used **only in Lab 101** for documentation; never edited |
 
 This collaborative setup means your changes stay isolated in your branch until you are ready to merge, while the rest of your team works in parallel.

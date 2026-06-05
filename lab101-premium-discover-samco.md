@@ -23,9 +23,9 @@ Use Bob's **Ask** mode to read live QSYS source members from `SAMSRC`, generate 
 
 ## Step 1: Explore the SAMSRC Library (2 minutes)
 
-1. Open Bob IDE , File , Open Folder, and open a newly created folder.
+1. Open Bob IDE , File , Open Folder, and open a newly created folder. Your workspace should be empty at that stage. 
 
-2. If not already done, connect to your IBM i from the `Code for i` servers panel. 
+2. If not already done, connect to your IBM i from the `Code for i` servers panel. This is also where you can adjust our Library list and add your SAMCOn library. (n = team number).
 
 2. Use the Code for i `Object Brower/Member Browser`to list the files and objects in the library [(documentation)](https://codefori.github.io/docs/browsers/). 
 
@@ -65,6 +65,8 @@ Save as docs/ART200-documentation.md in the local workspace.
 - Bob uses `read_member` with library=`SAMSRC`, file=`QRPGLESRC`, member=`ART200`
 - Explains the panel/step controller pattern and business rules
 - Uses `write_stream_file` to save `docs/ART200-documentation.md`
+- API Cost : around 0.35 bob coins
+
 
 ---
 
@@ -87,6 +89,7 @@ Save as docs/SAMCO-ArticleManagement-functional.md in the local workspace.
 - Bob reads additional members via `search_qsys` and `read_member` on `SAMSRC`
 - Documentation is written in business-friendly language, not technical jargon
 - Saved to `docs/SAMCO-ArticleManagement-functional.md`
+- API Cost : around 0.7 bob coins
 
 ---
 
@@ -114,6 +117,7 @@ Then run the `/erd` command to add a live schema diagram:
 - Bob queries `QSYS2.SYSTABLES`, `SYSCOLUMNS`, `SYSCST` to build the ERD
 - A **Mermaid ERD** is generated showing tables, primary keys, and foreign key relationships
 - Both architecture text and ERD are saved to `docs/SAMCO-architecture.md`
+- API Cost : around 1.8 bob coins
 
 > **Tip**: Try asking inline: *"What is the panel-step pattern in RPG?"* — Bob uses `search_ibm_i_docs_with_rag` to answer without leaving the conversation.
 
