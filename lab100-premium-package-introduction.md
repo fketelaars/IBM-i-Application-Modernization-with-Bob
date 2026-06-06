@@ -34,9 +34,11 @@ This collaborative setup means your changes stay isolated in your branch until y
 
 ---
 
-## 🧪 Bob Core Labs (Optional — No IBM i Connection /PPi Required)
+## 🧪 Bob Core Labs (No IBM i Connection /PPi Required)
 
-The following foundational labs can be completed with **Bob Core** (no Premium Package needed) and require minimal or no IBM i connection. They provide the application context and modernization concepts that the Premium labs build on.
+If Premium Package is not available, the following foundational labs can be completed with **Bob Core** (no Premium Package needed) and require minimal or no IBM i connection. They provide the application context and modernization concepts that the Premium labs build on.
+
+**Please go directly to the [IBM Bob and IBM i](./README.md) landing page to get started quickly.** 
 
 | Lab | Title | File |
 |-----|-------|------|
@@ -111,7 +113,7 @@ ADDLIBLE LIB(SAMCOx)    /* compiled objects — replace x with your team number 
 | [Lab 105](lab105-premium-impact-analysis.md) | Analyze SAMCO Object Dependencies | ℹ️ IBM i Developer | `search_qsys`, `execute_sql_statement`, `db2-system-catalog` | 15 min |
 | [Lab 106](lab106-premium-test-rpgunit.md) | Generate RPGUnit Tests for SAMCO | ℹ️ IBM i Developer | `generate_rpg_unit_test_stub`, `run_rpg_unit_test_suite` | 20 min |
 | [Lab 107](lab107-premium-field-change.md) | Extend a Field Across the Full Stack | ℹ️ IBM i Developer | `ALTER TABLE`, `search_ifs`, `write_stream_file`, `dds-display-files`, `rpg-embedded-sql` | 25 min |
-| | | | **Total Duration** | **~2 h 10 min** |
+| | | | **Total Duration** | **~2 h 30 min** |
 
 ---
 
