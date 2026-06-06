@@ -19,6 +19,77 @@ Use `generate_rpg_unit_test_stub` to scaffold test cases for exported procedures
 - `SAMCOn` in your library list — RPGUnit library also required
 - [Lab 101](lab101-premium-discover-samco.md) completed (business rules context)
 
+## Development Approach
+
+This lab uses a hybrid approach combining modern IFS-based source management with traditional IBM i testing:
+
+**Why This Approach?**
+- **Application Source in IFS**: Enables Git integration and modern development workflows
+- **Test Members in Library**: RPGUnit's `generate_rpg_unit_test_stub` tool requires IBM i members
+- **Separate Test Library**: Isolates test code from production, never deploy tests to production
+
+### Source Code Location
+```
+IFS (Integrated File System)
+└── /home/<USERNAME>/builds/IBM-i-Application-Modernization-with-Bob/  ← Workspace root
+        └── SAMCO/                                       ← Application source
+            ├── QRPGLESRC/
+            │   └── ART300-Function_Article.RPGLE       ← Service program source
+            └── QDDSSRC/
+                └── ARTICLE-Article_File.PF             ← Database definitions
+```
+
+### Test Code Location
+```
+IBM i Libraries (QSYS)
+└── SAMCOnTEST/                                          ← Test library
+    └── QRPGLESRC/                                       ← Test source file
+        └── ART300T.rpgle                                ← Test suite member
+```
+
+### Install RPGUnit (Manual Process)
+
+1. **Install IBM i Testing Extension**
+   - Open VS Code Extensions
+   - Search for "IBM i Testing"
+   - Click Install
+
+2. **Install RPGUnit Component to IBM i**
+   - Open Code for IBM i connection settings
+   - Navigate to "Components" tab
+   - Click "Add Component"
+   - Select "RPGUnit"
+   - Click Install
+
+3. **Update Library List**
+
+Update my library list to: SAMCOn, SAMCOnTEST, RPGUNIT, QDEVTOOLS
+
+
+
+### Library Organization
+
+```
+┌─────────────────────────────────────────────────┐
+│ SAMCOn          → Application library           │
+│                   (*PGM, *SRVPGM, *FILE)       │
+├─────────────────────────────────────────────────┤
+│ SAMCOnTEST      → Test library                  │
+│                   (*SRVPGM for tests)           │
+├─────────────────────────────────────────────────┤
+│ RPGUNIT         → RPGUnit framework             │
+│ QDEVTOOLS       → Development tools             │
+└─────────────────────────────────────────────────┘
+```
+
+### Naming Conventions
+
+| Type | Example | Location |
+|------|---------|----------|
+| Application Source | `ART300-Function_Article.RPGLE` | IFS: `SAMCO/QRPGLESRC/` |
+| Application Object | `ART300` (*SRVPGM) | Library: `SAMCO1` |
+| Test Source | `ART300T.rpgle` | Library: `SAMCO1TEST/QRPGLESRC` |
+| Test Object | `ART300T` (*SRVPGM) | Library: `SAMCO1TEST` |
 ---
 
 ## Step 1: Identify Exported Procedures (3 minutes)
@@ -43,14 +114,14 @@ Identify all exported procedures: name, parameters (type and usage), return type
 
 **Prompt:**
 ```
-Generate RPGUnit test stubs for GetArtDesc, GetArtRefSalPrice, and ExistArt from SAMCO/QRPGLESRC/ART300-Function_Article.RPGLE.
+Generate RPGUnit test stubs for GetArtDesc, GetArtRefSalPrice, and ExistArt from SAMCO/QRPGLESRC/ART300-Function_Article.RPGLE or Source member: /SAMCOSRC/QRPGLESRC/ART300.rpgle
+Focus on these procedures: GetArtDesc, GetArtRefSalPrice, GetArtStockPrice
 
 Use generate_rpg_unit_test_stub. Show the recommended storage location and generated stub code.
 ```
 
 **What to observe:**
 - Bob calls `generate_rpg_unit_test_stub` — reads exported signatures from the local file
-- Recommends storage: `SAMCO/QTESTSRC/ART300.test.rpgle`
 - Generates scaffold with correct includes, prototypes, and empty test procedures
 
 ---

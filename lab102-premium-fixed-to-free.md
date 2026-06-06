@@ -80,7 +80,7 @@ The workflow outputs a status table:
 **Prompt:** (please replace SAMCOn by your target library name)
 ```
 Get the compile actions for the newly converted ART200 program in the local workspace and compile it to SAMCOn```
-
+```
 **What to observe:**
 - Bob uses `get_compile_actions` — recommends `CRTSQLRPGI` for embedded SQL
 - Uses `execute_compile_action` targeting `SAMCOn`
@@ -89,6 +89,7 @@ Get the compile actions for the newly converted ART200 program in the local work
 ```
 Explain the compilation errors and suggest fixes.
 ```
+
 
 Common pitfalls Bob will catch:
 - `Dcl-S` added for externally-described file fields (must be removed)
