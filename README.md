@@ -11,9 +11,9 @@ Hands-on labs to learn IBM i modernization using IBM Bob AI assistant. Each lab 
 <img src="pics/image-bob.png" width="200">
 <br>
 <strong>IBM Bob Core & IBM i</strong>
-<br>
-Foundational Agentic solution for IBM i
 </a>
+<br>
+Foundational agentic solution for IBM i
 </td>
 
 <td align="center" width="50%">
@@ -21,9 +21,10 @@ Foundational Agentic solution for IBM i
 <img src="pics/image-bobppi.png" width="178">
 <br>
 <strong>IBM Bob & Premium Package for i</strong>
+</a>
 <br>
 Native/Optimized experience for IBM i
-</a>
+
 </td>
 </tr>
 </table>
