@@ -188,7 +188,7 @@ process_folder() {
   shift 2
   local extensions=("$@")
 
-  # Folder may not exist in this workspace (e.g. QIWSSRC on some clones)
+  # Folder may not exist in this workspace (e.g. QCLSRC on some clones)
   if [[ ! -d "$folder" ]]; then
     echo -e "  ${YELLOW}(skipping — folder not found: $folder)${RESET}"
     return
@@ -269,7 +269,6 @@ ensure_srcpfs() {
     [QDTASRC]="Data Area and Queue Source"
     [QILESRC]="ILE Program Build Source"
     [QILESRVSRC]="ILE Service Program Build Source"
-    [QIWSSRC]="IWS Web Service Source"
     [QMSGSRC]="Message File Source"
     [QPNLSRC]="Panel Group and Menu Source"
     [QRPGSRC]="OPM RPG Source"
@@ -281,7 +280,7 @@ ensure_srcpfs() {
 
   for srcpf in QRPGLESRC QPROTOSRC QDDSSRC QCLSRC QSQLSRC QSRVSRC QBNDSRC \
                QCBLSRC QCMDSRC QCPPSRC QCSRC QDTASRC QILESRC QILESRVSRC \
-               QIWSSRC QMSGSRC QPNLSRC QRPGSRC QSQLCPPSRC QSQLCSRC QTRGSRC \
+              QMSGSRC QPNLSRC QRPGSRC QSQLCPPSRC QSQLCSRC QTRGSRC \
                QTESTSRC; do
     if $DRY_RUN; then
       printf "  %-14s  ${CYAN}(dry-run) Would create if absent${RESET}\n" "$srcpf"
@@ -379,10 +378,6 @@ populate_members() {
   process_folder "$BASE/QILESRVSRC" "QILESRVSRC" \
     ILESRVPGM
 
-  # ---- QIWSSRC (IWS web service XML descriptors) -------------------------
-  echo -e "\n  ${CYAN}[ QIWSSRC ]${RESET}"
-  process_folder "$BASE/QIWSSRC" "QIWSSRC" \
-    xml XML
 
   # ---- QMSGSRC (message file source) ------------------------------------
   echo -e "\n  ${CYAN}[ QMSGSRC ]${RESET}"
