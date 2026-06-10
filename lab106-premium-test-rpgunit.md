@@ -3,7 +3,7 @@
 ## Overview
 Use `generate_rpg_unit_test_stub` to scaffold test cases for exported procedures in the `ART300` service program module, fill in test logic, and run the tests with code coverage against `SAMCOn`.
 
-**NOTE:** PPI includes workflows that automates the whole 'Test Generation' process, described here in this lab. The goal of this document is to show how to generate unit tests with Bob, with a few iterations and adjustments but in a real environment, use the appropriate Bob Worflow. 
+**NOTE:** PPI includes workflows that automates the whole 'RPGUnit Test Plan Generation and Execution' process, described here in this lab. The goal of this document is to show how to generate unit tests with Bob, with a few iterations and adjustments. **In a real environment, use the appropriate Bob Workflow.** 
 
 **Duration**: 20 minutes  
 **Difficulty**: Intermediate  
@@ -116,8 +116,8 @@ Identify all exported procedures: name, parameters (type and usage), return type
 
 **Prompt:**
 ```
-Generate RPGUnit test stubs for GetArtDesc, GetArtRefSalPrice, and ExistArt from  Source member: /SAMSRC/QRPGLESRC/ART300.rpgle
-Focus on these procedures: GetArtDesc, GetArtRefSalPrice, GetArtStockPrice. SAMSRC is in QSYS.
+Generate RPGUnit test stubs for GetArtDesc, GetArtRefSalPrice, and ExistArt from  Source member: /SAMSRCn/QRPGLESRC/ART300.rpgle
+Focus on these procedures: GetArtDesc, GetArtRefSalPrice, GetArtStockPrice. SAMSRCn is in QSYS.
 
 Use generate_rpg_unit_test_stub. Show the recommended storage location and generated stub code.
 ```
@@ -189,6 +189,16 @@ Explain the failure and identify the correct expected value from the ART300 impl
 
 ---
 
+## Step 6: Run RPGUnit Test Plan creation and implementation Workflows
+
+In the workflow list (local workspace scope) , select and run the appropriate workflows, using the information used in Step 2 to 5.
+
+> **Create RPGUnit Test Plan:** Creates an RPGUnit test plan for IBM i code by identifying testing goals, gathering supporting code and documents, validating the environment, and generating test plan artifacts for later implementation.
+
+> **Implement RPGUnit Test Plan:**  Implements an existing RPGUnit test plan by locating the generated planning artifacts, validating the IBM i test environment, and producing the RPGUnit test code and related outputs
+
+
+---
 ## ✅ Success Criteria
 
 - [ ] Exported procedures in `ART300-Function_Article.RPGLE` identified from local workspace

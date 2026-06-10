@@ -20,16 +20,18 @@ With Premium Package for i, source, system or application artifacts can live on 
 **Key general principles with Premium Package for i (PPi)**: Source can live in the **local workspace** or in **source files in QSYS**. When using PPi, you can keep your files in QSYS if you want to, and use Bob/PPi as an assistant while your developers still use SEU/PDM. **Just because you can doesn't mean you should!**.
 We really encourage you to move your source files to the IFS and git, and use QSYS when it makes sense. 
 
-**Key principle in these Labs**: Source lives in the **local workspace** only. `SAMCOn` (n = team number)contains compiled programs, service programs, and database objects — no source members. `SAMSRC` contains source files of the SAMCO application. In the rest of the labs, compiled objects always target `SAMCOn`.
+**Key principle in these Labs**: Source lives in the **local workspace** only. `SAMCOn` (n = team number)contains compiled programs, service programs, and database objects — no source members. `SAMSRCn` contains source files of the SAMCO application. In the rest of the labs, compiled objects always target `SAMCOn`.
 
-The SAMCO application and database has already been built in your `SAMCOn` library so initally you don't have to build it. During the lab, you may need to modify the source code, and if you wish, you can recompile it, here using the Tobi (makei) tool. Of course, in your day to day developer activity, other build tools or scripts could be used. 
+**Important Note**: Throughout the lab, you can start a new Bob task specifying a scope (workspace) using the "+" button at the top of the 'IBM Bob' view: **local** workspace, **QSYS (Library list)**, or **IFS**. Most exercises can be run in either scope. The behavior of the tool will be slightly different: **experiment and choose!**
+
+The SAMCO application and database have already been built in your `SAMCOn` library so initally you don't have to build it. During the lab, you may need to modify the source code, and if you wish, you can recompile it, here using the Tobi (makei) tool. Of course, in your day to day developer activity, other build tools or scripts could be used. 
 
 | What | Where |
 |------|-------|
 | **Source code** | Local workspace — your Git clone on your workstation (IFS-synchronized). **This is the only place source is edited.** |
 | **Your workspace** | Your own clone of the shared Git repository — Bob reads and writes local files directly |
 | **Compiled objects & database** | Built and stored in **`SAMCOn`** on IBM i — where `n` is your team number (e.g., `SAMCO1`, `SAMCO3`) |
-| **`SAMSRC` library** | Original read-only source members on IBM i — used **in Lab 101** for documentation; never edited |
+| **`SAMSRCn` library** | Library containing source members on IBM i — used **in Lab 101** for documentation; normally, never edited |
 
 This collaborative setup means your changes stay isolated in your branch until you are ready to merge, while the rest of your team works in parallel.
 
@@ -42,8 +44,8 @@ This collaborative setup means your changes stay isolated in your branch until y
 | [Lab 102](lab102-premium-fixed-to-free.md) | Convert Fixed-Format RPG to Free | ℹ️ IBM i Developer | `convert_rpg_source`, **Fixed to Free Workflow**, RPG skills | 20 min |
 | [Lab 103](lab103-premium-dds-to-sql-workflow.md) | Convert DDS to SQL with the Workflow | ℹ️ IBM i Developer | **DDS to SQL Workflow**, `db2-dds-to-ddl`, `check_sql_syntax` | 20 min |
 | [Lab 104](lab104-premium-rla-to-sql.md) | Convert RLA to SQL and Optimize | 🛢️ IBM i Database | `/erd`, `db2-sql-primer`, `db2-index-strategy` | 20 min |
-| [Lab 105](lab105-premium-impact-analysis.md) | Analyze Impact and Extend a Field Across the Full Stack | ℹ️ IBM i Developer | `QSYS2.SYSDEP`, `ALTER TABLE`, `search_ifs`, `write_stream_file`, `dds-display-files`, `rpg-embedded-sql` | 35 min |
-| [Lab 106](lab106-premium-test-rpgunit.md) | Generate RPGUnit Tests for SAMCO | ℹ️ IBM i Developer | `generate_rpg_unit_test_stub`, `run_rpg_unit_test_suite` | 20 min |
+| [Lab 105](lab105-premium-impact-analysis.md) | Analyze Impact and Extend a Field Across the Full Stack | ℹ️ IBM i Developer | `QSYS2.SYSDEP`, `ALTER TABLE`, `search_ifs`, `write_stream_file`, `dds-display-files`, `rpg-embedded-sql` , **Business Rules Extraction Workflow** | 35 min |
+| [Lab 106](lab106-premium-test-rpgunit.md) | Generate RPGUnit Tests for SAMCO | ℹ️ IBM i Developer | `generate_rpg_unit_test_stub`, `run_rpg_unit_test_suite` , **RPGUnit Test Plan Workflows** | 20 min |
 | | | | **Total Duration** | **~2 h 15 min** |
 
 ---
@@ -84,13 +86,15 @@ Install the following extensions from the VS Code Marketplace (or via the `.vsix
 
 
 - **(Optional) Establish an SSH tunnel when using IBM i on PVS** if you want to use a 5250 terminal session from your workstation. Only required if using IBM i on PowerVS (IBM Cloud) with a public IP. Please ask your instructor. (see instructions [here](https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-connect-ibmi#ssh-tunneling , the instructor will share the command to run on your workstation).
-- In the **Code for IBM i** object browser, browse library **`SAMSRC`** — this contains the original source members (RPG, CL, DDS, SQL) for reference.
-- Browse library **`SAMCOx`** (your team's library) — this contains compiled programs, objects, and the database.
+- In the **Code for IBM i** object browser, browse library **`SAMSRCn`** — this contains the original source members (RPG, CL, DDS, SQL) for reference.
+- Browse library **`SAMCOn`** (your team's library) — this contains compiled programs, objects, and the database.
 - Launch **`GO SAMMNU`** on 5250 to explore the SAMCO application menu and understand the green-screen interface you will be modernizing.
 
 ### Library List
 
-Your job's library list must include `SAMCOx` so that compiled programs can find their files and service programs at runtime:
+
+**Important Note**: Your job's library list must include `SAMCOx` so that compiled programs can find their files and service programs at runtime. **Ideally, in your Bob IDE, please make sure your Library List includes: `SAMCOn` , `SAMSRCn`** 
+
 
 ```cl
 ADDLIBLE LIB(SAMCOx)    /* compiled objects — replace x with your team number */
@@ -99,6 +103,7 @@ ADDLIBLE LIB(SAMCOx)    /* compiled objects — replace x with your team number 
 Set the library list in the **Code for IBM i** connection settings under *User Library List* . If needed please refer to the [documentation](https://codefori.github.io/docs/browsers/).
 
 ![alt text](pics/image-3ppi.png)
+ 
 ---
 
 ## Lab Descriptions

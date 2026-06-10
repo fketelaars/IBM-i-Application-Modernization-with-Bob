@@ -33,24 +33,26 @@ Use Bob's **Ask** mode to read live QSYS source members from `SAMSRC`, generate 
 
 **Switch to 💬 Ask mode** in the Bob chat panel.
 
+If working in teams, please use your team number n, and use `SAMSRCn` in the rest of the instructions: 
+ 
 **Prompt:**
 ```
-List all source files in library SAMSRC. For each, show the source file name and its typical content type (QRPGLESRC, QDDSSRC, QCLSRC, QSQLSRC, etc.).
+List all source files in library SAMSRCn. For each, show the source file name and its typical content type (QRPGLESRC, QDDSSRC, QCLSRC, QSQLSRC, etc.).
 ```
 
 **What to observe:**
-- Bob uses `search_qsys` to scan `SAMSRC`
+- Bob uses `search_qsys` to scan `SAMSRCn`
 - Returns a structured list of source file types and member counts
 - API Cost : around 0.06 bob coins
 ---
 
 ## Step 2: Generate Program-Level Documentation (4 minutes)
 
-> ℹ️ In QSYS, member names are limited to **10 characters**. The member for `ART200` is named `ART200` in source file `QRPGLESRC` of library `SAMSRC`.
+> ℹ️ In QSYS, member names are limited to **10 characters**. The member for `ART200` is named `ART200` in source file `QRPGLESRC` of library `SAMSRCn`.
 
 **Prompt:**
 ```
-Read member ART200 from SAMSRC/QRPGLESRC.
+Read member ART200 from SAMSRCn/QRPGLESRC.
 
 Generate concise technical documentation covering:
 1. Program purpose and display file used
@@ -62,7 +64,7 @@ Save as docs/ART200-documentation.md in the local workspace.
 ```
 
 **What to observe:**
-- Bob uses `read_member` with library=`SAMSRC`, file=`QRPGLESRC`, member=`ART200`
+- Bob uses `read_member` with library=`SAMSRCn`, file=`QRPGLESRC`, member=`ART200`
 - Explains the panel/step controller pattern and business rules
 - Uses `write_stream_file` to save `docs/ART200-documentation.md`
 - API Cost : around 0.35 bob coins
@@ -74,7 +76,7 @@ Save as docs/ART200-documentation.md in the local workspace.
 
 **Prompt:**
 ```
-Based on the ART200 program and the ARTICLE, FAMILLY, and VATDEF members in SAMSRC/QRPGLESRC and SAMSRC/QDDSSRC:
+Based on the ART200 program and the ARTICLE, FAMILLY, and VATDEF members in SAMSRCn/QRPGLESRC and SAMSRCn/QDDSSRC:
 
 Generate a functional business document for the "Article Management" business function:
 - What the function does (business perspective)
@@ -86,7 +88,7 @@ Save as docs/SAMCO-ArticleManagement-functional.md in the local workspace.
 ```
 
 **What to observe:**
-- Bob reads additional members via `search_qsys` and `read_member` on `SAMSRC`
+- Bob reads additional members via `search_qsys` and `read_member` on `SAMSRCn`
 - Documentation is written in business-friendly language, not technical jargon
 - Saved to `docs/SAMCO-ArticleManagement-functional.md`
 - API Cost : around 0.7 bob coins
@@ -99,7 +101,7 @@ Save as docs/SAMCO-ArticleManagement-functional.md in the local workspace.
 Generate a functional business document using the `Business Rules Extraction` workflow.
 - Click on the `Start Workflow` top right button
 - Select the workflow `Business Rules Extraction - Library List`
-- Choose `LIBRARY`: `SAMSRC`; `SOURCE FILE`: `QRPGLESRC`; `MEMBER`: `ART300` , then Continue.
+- Choose `LIBRARY`: `SAMSRCn`; `SOURCE FILE`: `QRPGLESRC`; `MEMBER`: `ART300` , then Continue.
 
 **What to observe:**
 - Bob uses a guided workflow to get the necessary data and generate a complete report describing a business function
@@ -167,6 +169,6 @@ Then run the `/erd` command to add a live schema diagram (add the erd slash comm
 
 ## Next Steps
 
-> **From Lab 102 onwards**: source work is exclusively on the **local workspace** (Git clone). Bob reads and edits local files with `read_stream_file` / `write_stream_file`; `SAMCOn` is the build target. `SAMSRC` is never used for code modifications.
+> **From Lab 102 onwards**: source work is exclusively on the **local workspace** (Git clone). Bob reads and edits local files with `read_stream_file` / `write_stream_file`; `SAMCOn` is the build target. `SAMSRCn` is never used for code modifications.
 
 Proceed to [Lab 102](lab102-premium-fixed-to-free.md) — convert fixed-format RPG to free-form.
