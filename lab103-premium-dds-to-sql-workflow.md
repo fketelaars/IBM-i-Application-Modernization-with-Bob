@@ -24,9 +24,10 @@ Use the **DDS to SQL Conversion** workflow built into the IBM Bob Premium Packag
 ## Step 1: Launch the Workflow (1 minute)
 
 1. In the Bob chat panel, click the **Workflows** icon (⚡) in the toolbar
+2. Select `Run in Library List` 
 2. Select **"DDS to SQL Conversion Impact Analysis"**
 3. A form panel appears — fill in:
-   - **Library Name**: `SAMCO20`
+   - **Library Name**: `SAMCOn` (n = team number)
    - **Object Name**: `ARTICLE`
    - **Is this a Logical File (LF)?**: leave unchecked (it is a PF)
 4. Click **Analyse**
@@ -39,7 +40,7 @@ Use the **DDS to SQL Conversion** workflow built into the IBM Bob Premium Packag
 
 The workflow calls:
 ```sql
-CALL QSYS2.GENERATE_SQL('ARTICLE', 'SAMCO20', 'TABLE',
+CALL QSYS2.GENERATE_SQL('ARTICLE', 'SAMCOn', 'TABLE',
     ADDITIONAL_INDEX_OPTION => '1',
     CREATE_OR_REPLACE_OPTION => '1',
     CCSID_OPTION => '1',
@@ -61,15 +62,10 @@ CALL QSYS2.GENERATE_SQL('ARTICLE', 'SAMCO20', 'TABLE',
 After generating the DDL the workflow automatically collects relationships, static program references, object status, journaling, locks, and authority — then renders the full report.
 
 ### Database Relationships
-Bob queries `SYSTOOLS.RELATED_OBJECTS` for `SAMCO20/ARTICLE`. Look for any logical files or views that depend on the physical file.
+Bob queries `SYSTOOLS.RELATED_OBJECTS` for `SAMCOn/ARTICLE`. Look for any logical files or views that depend on the physical file.
 
 ### Static Program References
-Bob runs `DSPPGMREF` across every library in your library list and queries `QTEMP/PGMREF` for references to `ARTICLE`. Expected results include programs like `ART200`, `ART300`, `ART400`.
-
-| Library | Program | Type |
-|---------|---------|------|
-| SAMCO20 | ART200  | *PGM |
-| SAMCO20 | ART300  | *PGM |
+Bob runs `DSPPGMREF` across every library in your library list and queries `QTEMP/PGMREF` for references to `ARTICLE`. Expected results is an empty list of programs here as `ART200` program only references the logical files  `ARTICLE1` and `ARTICLE2`  (views)
 
 ### Object Status & Journaling
 Bob queries `QSYS2.OBJECT_STATISTICS` and `QSYS2.JOURNALED_OBJECTS`. Note whether journaling is enabled — the replacement SQL table must replicate this setting.
@@ -92,13 +88,13 @@ Looking at the generated DDL for ARTICLE, add:
 2. CHECK (ARDEL IN ('0', '1')) constraint on ARDEL
 
 Then validate the result with check_sql_syntax. If it passes, create the table as
-SAMCO20.ARTICLE_NEW and ask me to confirm before executing.
+SAMCOn.ARTICLENEW and ask me to confirm before executing.
 ```
 
 **What to observe:**
 - Bob edits the `CREATE TABLE` statement in-chat
 - Calls `check_sql_syntax` — must report **Syntax OK** before proceeding
-- Presents: *"This will create table ARTICLE_NEW in SAMCO20. Approve?"*
+- Presents: *"This will create table ARTICLENEW in SAMCOn. Approve?"*
 - After your confirmation, executes with `execute_sql_statement`
 
 ---
@@ -107,7 +103,7 @@ SAMCO20.ARTICLE_NEW and ask me to confirm before executing.
 
 **Prompt:**
 ```
-Query QSYS2.SYSCOLUMNS for ARTICLE_NEW in SAMCO20.
+Query QSYS2.SYSCOLUMNS for ARTICLENEW in SAMCOn.
 Show column name, data type, length, and default value.
 ```
 
@@ -117,11 +113,11 @@ Expected: 14 rows — matching the original `ARTICLE` columns — with `ARDEL` s
 
 ## ✅ Success Criteria
 
-- [ ] Workflow form accepted `SAMCO20` / `ARTICLE` and proceeded through all 5 steps
+- [ ] Workflow form accepted `SAMCOn` / `ARTICLE` and proceeded through all 5 steps
 - [ ] Generated DDL shown in chat with `LABEL ON` and index statements
 - [ ] Impact report listed database relationships, static program references, journaling status, locks, and authority
 - [ ] DDL refined with `DEFAULT` and `CHECK` on `ARDEL`; `check_sql_syntax` returned OK
-- [ ] `CREATE TABLE SAMCO20.ARTICLE_NEW` executed after approval
+- [ ] `CREATE TABLE SAMCOn.ARTICLENEW` executed after approval
 - [ ] `QSYS2.SYSCOLUMNS` confirmed 14 columns with correct types
 
 ---
@@ -139,5 +135,5 @@ Expected: 14 rows — matching the original `ARTICLE` columns — with `ARDEL` s
 ## Next Steps
 
 - Proceed to [Lab 104](lab104-premium-rla-to-sql.md) — convert RLA file operations to embedded SQL in RPG programs
-- Run the workflow again on `SAMCO20/FAMILLY` (a simpler PF) to compare impact reports
-- Run the workflow on `SAMCO20/ARTICLE1` and check **Is this a Logical File (LF)?** — observe how `GENERATE_SQL` produces a `CREATE VIEW` instead
+- Run the workflow again on `SAMCOn/FAMILLY` (a simpler PF) to compare impact reports
+- Run the workflow on `SAMCOn/ARTICLE1` and check **Is this a Logical File (LF)?** — observe how `GENERATE_SQL` produces a `CREATE VIEW` instead

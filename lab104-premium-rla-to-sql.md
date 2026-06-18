@@ -35,6 +35,7 @@ Run the `/erd` command:
 - Bob queries `QSYS2.SYSTABLES`, `SYSCOLUMNS`, `SYSCST` and generates a **Mermaid ERD**
 - Shows ARTICLE → FAMILLY (via ARFAMCOD) and ARTICLE → VATDEF (via ARVAT) relationships
 - Auto-loads `db2-sql-primer`, `db2-sql-optimization`, `db2-index-strategy` skills
+- Here with existing SAMCO, there are no SQL constraints defined in the catalog — these are DDS-era physical files with no formal referential integrity. The `/erd` command will build the column data needed to build the ERD from structural analysis.
 
 ---
 
@@ -46,13 +47,13 @@ The `ART200` program currently uses two sequential operations:
 
 **Prompt:**
 ```
-Read SAMCO/QRPGLESRC/ART200-Work_with_article.PGM.SQLRPGLE.
+Read in SAMSRCn library the SQLRPGLE program in QRPGLESRC/ART200 
 
 Find where it chains into ARTICLE then calls getArtFamDesc() to get the family description. Replace these two operations with a single SQL SELECT … LEFT JOIN. Show the new EXEC SQL block.
 ```
 
 **What to observe:**
-- Bob reads the local workspace file and auto-loads the `rpg-embedded-sql` skill
+- Bob reads directly in QSYS (or the local workspace file if you specify a local path OR the IFS if you specify an IFS path) and auto-loads the `rpg-embedded-sql` skill
 - Generates an `EXEC SQL` block:
 
 ```rpgle
@@ -94,12 +95,10 @@ Generate and validate the CREATE INDEX statement, then execute it in SAMCOn with
 **What to observe:**
 - The guardrail can block the execution — the DDL approval must be confirmed at the tool level.
 
-Bob uses `check_sql_syntax` then `execute_sql_statement` after approval:
+Bob uses `check_sql_syntax` then `execute_sql_statement` after approval (index name can vary):
 ```sql
-CREATE INDEX SAMCOn.ARTFAM_IDX ON ARTICLE(ARFAMCOD);
+CREATE INDEX SAMCOn.ARTICLE_ARTFAM_IDX ON ARTICLE(ARFAMCOD);
 ```
-> ℹ️ QSYS object names are limited to **10 characters** — use short names like `ARTFAM_IDX`.
-
 ---
 
 ## Step 4: Create a Summary View (3 minutes)
@@ -108,9 +107,6 @@ CREATE INDEX SAMCOn.ARTFAM_IDX ON ARTICLE(ARFAMCOD);
 ```
 Create a SQL view ARTSUM in SAMCOn combining ARTICLE, FAMILLY, and VATDEF with LEFT JOINs. Include: ARID, ARDESC, ARSALEPR, ARSTOCK, family description, VAT rate. Exclude soft-deleted records (ARDEL = '0'). Validate and execute.
 ```
-
-> ℹ️ QSYS object names are limited to **10 characters** — `ARTSUM` is the correct form (not `ARTICLE_SUMMARY`).
-
 **What to observe:**
 - Bob generates the `CREATE OR REPLACE VIEW` DDL
 - Uses `check_sql_syntax` before executing
@@ -129,12 +125,10 @@ Create a SQL view ARTSUM in SAMCOn combining ARTICLE, FAMILLY, and VATDEF with L
 
 ## Key Takeaways
 
-- IBM i Database mode prioritizes SQL-first solutions with 15 Db2 skills
+- IBM i Database mode prioritizes SQL-first solutions with 15+ Db2 skills
 - `/erd` visualizes relationships before writing queries — avoids join mistakes
 - A single SQL JOIN is more efficient than sequential CHAIN operations
 - `db2-index-strategy` skill recommends indexes based on actual query patterns
-- QSYS object names are limited to **10 characters** — always use short names for indexes and views
-- SQL views and indexes are created in `SAMCOn` (the database); source edits stay in the local workspace
 
 ---
 

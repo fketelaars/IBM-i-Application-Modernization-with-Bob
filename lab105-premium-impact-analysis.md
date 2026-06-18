@@ -32,8 +32,7 @@ across all three layers: database, display file, and RPG program.
 ## Use Case
 
 The `ARDESC` field (article description) in `SAMCOn.ARTICLE` is currently 30 characters.
-Business requires 50. Before touching anything, perform a full impact analysis. Then execute
-the change consistently across:
+Business requires 50. Before touching anything, perform a full impact analysis. Then execute the change consistently across:
 
 | Layer | Object | Change |
 |-------|--------|--------|
@@ -51,12 +50,12 @@ the change consistently across:
 
 **Prompt:**
 ```
-Find all objects in SAMCOn that depend on the ARTICLE file using QSYS2.SYSDEP.
+Find all objects in SAMCOn that depend on the ARTICLE file using QSYS2.SYSTABLEDEP.
 Return object name, object type, and dependency type as a table.
 ```
 
 **What to observe:**
-- Bob uses `execute_sql_statement` against `QSYS2.SYSDEP`
+- Bob uses `execute_sql_statement` against `QSYS2.SYSTABLEDEP`
 - The `db2-system-catalog` skill is auto-loaded
 - Returns dependent programs, service programs, logical files, and views
 
@@ -80,15 +79,14 @@ Show constraint name, child table, parent table, and FK column as a table.
 
 **Prompt:**
 ```
-Search the local workspace (SAMCO/ directory) for all references to the field ARDESC.
-Also query QSYS2.SYSCOLUMNS WHERE COLUMN_NAME = 'ARDESC' AND TABLE_SCHEMA = 'SAMCOn'.
+Search for all references to the field ARDESC.
+Also query QSYS2.SYSCOLUMNS WHERE COLUMN_NAME = 'ARDESC' AND TABLE_SCHEMA = 'SAMCO1'.
 Show file name, line number, and line content. Compile a full impact list.
 ```
 
 **What to observe:**
 - Bob queries `QSYS2.SYSCOLUMNS` via `execute_sql_statement` — confirms current `COLUMN_LENGTH`
-- Uses `search_ifs` on the local workspace — finds occurrences in RPG programs and DDS files
-- Returns a combined impact list across database objects and local source files
+- Returns a combined impact list across database objects and source files
 
 ---
 
@@ -104,11 +102,11 @@ Consider:
 2. Programs using embedded SQL with SELECT *
 3. Logical files built over ARTICLE
 
-Use QSYS2.SYSDEP and search the local workspace for SELECT * patterns.
+Use QSYS2.SYSTABLEDEP and search the local workspace for SELECT * patterns.
 ```
 
 **What to observe:**
-- Bob queries `QSYS2.SYSDEP` and searches local source for `SELECT *`
+- Bob queries `QSYS2.SYSTABLEDEP` and searches local source for `SELECT *`
 - The `rpg-code-review` and `db2-system-catalog` skills are auto-loaded
 - Returns a recompile impact list with reasons for each object
 
@@ -120,13 +118,13 @@ Use QSYS2.SYSDEP and search the local workspace for SELECT * patterns.
 ```
 Generate a markdown impact report for the ARDESC widening in SAMCOn.ARTICLE summarizing:
 dependent objects, foreign key relationships, ARDESC field usage across source files,
-and the recompile list. Save it as docs/ARTICLE-ARDESC-impact-report.md in the local workspace.
+and the recompile list. Save it as docs/ARTICLE-ARDESC-impact-report.md in the IFS.
 ```
 
 **What to observe:**
 - Bob synthesizes all previous steps into a single document
 - Uses `write_stream_file` to save `docs/ARTICLE-ARDESC-impact-report.md`
-
+- Visualize the resulting markdown file using the IFS Browser (Code for i)
 ---
 
 ## Part 2 — Execute the Change (act correctly across every layer)
@@ -153,6 +151,9 @@ Expected: `COLUMN_LENGTH = 50`
 ---
 
 ### Step 7: Update the Display File (6 minutes)
+
+Push the `+`top right button, and let's edit the local SAMCO file in the local workspace by selecting `New Task in SAMCO`. 
+Note that if you want to directly edit source files in QSYS (SAMSRCn library), please adapt the prompts in this lab accordingly. 
 
 **Prompt:**
 ```
@@ -219,7 +220,7 @@ Bob uses `search_ibm_i_docs_with_rag` to look up the message and explain the imp
 
 ## ✅ Success Criteria
 
-- [ ] All ARTICLE dependents listed using `QSYS2.SYSDEP`
+- [ ] All ARTICLE dependents listed using `QSYS2.SYSTABLEDEP`
 - [ ] Foreign key map generated from `QSYS2.SYSCST` + `QSYS2.SYSREFCST`
 - [ ] `ARDESC` references found in `QSYS2.SYSCOLUMNS` and local workspace via `search_ifs`
 - [ ] Recompile impact list generated before any change was made
@@ -233,7 +234,7 @@ Bob uses `search_ibm_i_docs_with_rag` to look up the message and explain the imp
 
 ## Key Takeaways
 
-- `QSYS2.SYSDEP`, `SYSCST`, and `SYSREFCST` reveal all dependencies from the live catalog — always run this before any structural change
+- `QSYS2.SYSTABLEDEP`, `SYSCST`, and `SYSREFCST` reveal all dependencies from the live catalog — always run this before any structural change
 - `search_ifs` searches local workspace files for source references — no IBM i connection needed
 - **Impact-first**: save a report before touching anything — the report becomes your change ticket
 - `ALTER TABLE` requires guardrail approval — no silent data loss
@@ -244,7 +245,5 @@ Bob uses `search_ibm_i_docs_with_rag` to look up the message and explain the imp
 
 ## Next Steps
 
-- Commit the updated DSPF, SQLRPGLE, and impact report to your Git branch
-- Extend the same field in the `CUSTOMER` or `PROVIDER` table using the same analysis-first pattern
-- Ask Bob to check if any printer file (`ORD500O.PRTF`) also uses `ARDESC`
+- If you use git, Commit the updated DSPF, SQLRPGLE, and impact report to your Git branch
 - Proceed to [Lab 106](lab106-premium-test-rpgunit.md) — generate RPGUnit tests for SAMCO

@@ -18,8 +18,22 @@
     ]
   },
   {
+    "name": "Build current with makei (SQLRPGLE/RPGLE) 🔨",
+    "command": "OPT=*EVENTF BUILDLIB=&CURLIB /QOpenSys/pkgs/bin/makei compile -f &BASENAME",
+    "deployFirst": true,
+    "environment": "pase",
+    "extensions": [
+      "SQLRPGLE",
+      "RPGLE"
+    ],
+    "postDownload": [
+      ".logs",
+      ".evfevent"
+    ]
+  },
+  {
     "name": "Create SQLRPGLE Program",
-    "command": "CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB) INCDIR(''&WORKSPACEROOT/SAMCO/QPROTOSRC'' ''&WORKSPACEROOT/SAMCO/includes'')') RPGPPOPT(*LVL2)",
+    "command": "CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB)') INCDIR('&WORKSPACEROOT/SAMCO/QPROTOSRC' '&WORKSPACEROOT/SAMCO/includes') RPGPPOPT(*LVL2)",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
@@ -28,7 +42,7 @@
   },
   {
     "name": "Create SQLRPGLE Module",
-    "command": "CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OBJTYPE(*MODULE) OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB) INCDIR(''&WORKSPACEROOT/SAMCO/QPROTOSRC'' ''&WORKSPACEROOT/SAMCO/includes'')') RPGPPOPT(*LVL2)",
+    "command": "CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OBJTYPE(*MODULE) OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB)') INCDIR('&WORKSPACEROOT/SAMCO/QPROTOSRC' '&WORKSPACEROOT/SAMCO/includes') RPGPPOPT(*LVL2)",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
