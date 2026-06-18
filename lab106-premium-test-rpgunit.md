@@ -8,10 +8,8 @@ Use `generate_rpg_unit_test_stub` to scaffold test cases for exported procedures
 **Duration**: 20 minutes  
 **Difficulty**: Intermediate  
 **Mode**: ℹ️ IBM i Developer  
-**Source**: Local workspace (`SAMCO/QRPGLESRC/`)  
-**Build target**: `SAMCOn` / `SAMCOnT`
-
-> **Local workspace**: Bob reads the source file from the **local Git clone**. Test stubs are written to the workspace. The test suite is compiled and run against `SAMCOn`.
+**Source**: QSYS  : `SAMSRCn`library , `QRPGLESRC` and `QTESTSRC` physical files  
+**Build target**: `SAMCOn` ,  creating test suite in program sufixed with a `T`
 
 ---
 
@@ -37,62 +35,23 @@ Use `generate_rpg_unit_test_stub` to scaffold test cases for exported procedures
 
 3. **Update Library List**
 
-Update library list to: SAMCOn, SAMCOnT (to be created), RPGUNIT, QDEVTOOLS
+Update library list to: SAMCOn, SAMSRCn, RPGUNIT, QDEVTOOLS
 
 ![alt text](pics/image-rpgunitlist.png)
 
-## Development Approach
-
-This lab uses a hybrid approach combining modern IFS-based source management with traditional IBM i testing:
-
-**Why This Approach?**
-- **Application Source in IFS**: Enables Git integration and modern development workflows
-- **Test Members in Library**: RPGUnit's `generate_rpg_unit_test_stub` tool requires IBM i members
-- **Separate Test Library**: Isolates test code from production, never deploy tests to production
 
 ### Source Code Location
 ```
-IFS (Integrated File System)
-└── /home/<USERNAME>/builds/IBM-i-Application-Modernization-with-Bob/  ← Workspace root
-        └── SAMCO/                                       ← Application source
-            ├── QRPGLESRC/
-            │   └── ART300-Function_Article.RPGLE       ← Service program source
-            └── QDDSSRC/
-                └── ARTICLE-Article_File.PF             ← Database definitions
+Workspace or IFS (Integrated File System) or QSYS (SAMSRC lib, QRPGSRC file)
 ```
 
 ### Test Code Location
 ```
 IBM i Libraries (QSYS)
-└── SAMCOnT/                                          ← Test library
+└── SAMSRCn/                                          ← App = Test library
     └── QTESTSRC/                                       ← Test source file
-        └── ART300T.SQLPRGLE                                ← Test suite member
+        └── TART300.RPGLE                                ← Test suite member
 ```
-
-### Library Organization
-
-```
-┌─────────────────────────────────────────────────┐
-│ SAMCOn          → Application library           │
-│                   (*PGM, *SRVPGM, *FILE)        │
-├─────────────────────────────────────────────────┤
-│ SAMCOnT → Test library                          │
-│  QTESTSRC                (*SRVPGM for tests)    │
-├─────────────────────────────────────────────────┤
-│ RPGUNIT         → RPGUnit framework             │
-│ QDEVTOOLS       → Development tools             │
-└─────────────────────────────────────────────────┘
-```
-
-### Naming Conventions
-
-| Type | Example | Location |
-|------|---------|----------|
-| Application Source | `ART300-Function_Article.RPGLE` | IFS: `SAMCO/QRPGLESRC/` |
-| Application Object | `ART300` (*SRVPGM) | Library: `SAMCO1` |
-| Test Source | `ART300T.rpgle` | Library: `SAMCO1T/QTESTSRC` |
-| Test Object | `ART300T` (*SRVPGM) | Library: `SAMCO1` |
----
 
 ## Step 1: Identify Exported Procedures (3 minutes)
 
@@ -100,7 +59,7 @@ IBM i Libraries (QSYS)
 
 **Prompt:**
 ```
-Read SAMCO/QRPGLESRC/ART300-Function_Article.RPGLE.
+Read SAMCOn library QRPGLESRC/ART300 RPGLE source
 
 Identify all exported procedures: name, parameters (type and usage), return type, and purpose. Summarize as a table.
 ```
@@ -108,31 +67,32 @@ Identify all exported procedures: name, parameters (type and usage), return type
 **What to observe:**
 - Bob reads the local workspace file
 - The `rpg-procedures-functions` skill is auto-loaded
-- Returns the full procedure inventory — key exported procedures: `GetArtDesc`, `GetArtRefSalPrice`, `GetArtStockPrice`, `GetArtFam`, `GetArtStock`, `ExistArt`, `IsArtDeleted`
+- Returns the full procedure inventory — key exported procedures: `GetArtDesc`, `GetArtRefSalPrice`, `GetArtStockPrice`, `GetArtFam`, `GetArtStock`, `ExistArt`, `IsArtDeleted`, etc.
 
 ---
 
-## Step 2: Generate RPGUnit Test Stubs (4 minutes)
+## Part 1 : Generate RPGUnit Test Stubs, Execute first Test Suite (4 minutes)
 
 **Prompt:**
 ```
-Generate RPGUnit test stubs for GetArtDesc, GetArtRefSalPrice, and ExistArt from  Source member: /SAMSRCn/QRPGLESRC/ART300.rpgle
-Focus on these procedures: GetArtDesc, GetArtRefSalPrice, GetArtStockPrice. SAMSRCn is in QSYS.
+Generate RPGUnit test stubs for GetArtDesc, GetArtRefSalPrice, and ExistArt from  Source member: QRPGLESRC/ART300.rpgle from the SAMSRCn library.
+Focus on these procedures: GetArtDesc, GetArtRefSalPrice, GetArtStockPrice. 
+SAMSRCn is in QSYS.
 
-Use generate_rpg_unit_test_stub. Show the recommended storage location and generated stub code.
+Use generate_rpg_unit_test_stub. Show the recommended storage location and generated stub code. 
 ```
 
 **What to observe:**
 - Bob calls `generate_rpg_unit_test_stub` — reads exported signatures from the local file
 - Generates scaffold with correct includes, prototypes, and empty test procedures
-
+- Bob suggest to  compile, or add assertion values for specific test data using skill `rpgunit-testing` , `run_rpg_unit_test_suite`. 
 ---
 
-## Step 3: Fill In Test Logic (6 minutes)
+### Step : Fill In Test Logic (6 minutes)
 
 **Prompt:**
 ```
-Based on the SAMCO business rules from Lab 101:
+Based on the SAMCO business rules :
 - GetArtDesc returns ARDESC for a given ARID
 - ExistArt returns *On if the article exists and is not soft-deleted (ARDEL ≠ 'X')
 - GetArtRefSalPrice returns ARSALEPR for a given ARID
@@ -143,39 +103,15 @@ Fill in test assertions for each procedure — one positive test and one negativ
 **What to observe:**
 - Bob fills in `AssertEquals` / `AssertNotEquals` assertions using actual field names from `SAMREF.PF`
 
-**Prompt:**
-```
-Write the completed test suite to library SAMCO20T file QTESTSRC member ART300T.SQLRPGLE
-```
-
----
-
-## Step 4: Compile the Test Suite (3 minutes)
-
-Confirm that you want to compile the test suite or use a prompt like: 
-
-**Prompt:**
-```
-Get compile actions for SAMCOnT/QTESTSRC/ART300T.SQLRPGLE and compile it to SAMCOnT. before compiling Add /QSYS.LIB/RPGUNIT.LIB/QINCLUDE.FILE and IFS path SAMCO/QPROTOSRC to INCDIR.
-```
-
-**What to observe:**
-- Bob uses `get_compile_actions` then `execute_compile_action`
-- If the RPGUNIT library is missing from the library list, Bob will flag it
-
-Common issues:
-- Prototype mismatch — Bob adjusts parameter types to match actual exported signatures
-- `COMMIT(*NONE)` required in SQL test setup — Bob adjusts automatically
-
 ---
 
 ![alt text](pics/image-rpgunit.png)
 
-## Step 5: Run the Tests with Code Coverage (4 minutes)
+### Step : Run the Tests with Code Coverage (4 minutes)
 
 **Prompt:**
 ```
-Run the RPGUnit test suite SAMCOnT/QTESTSRC/ART300 with *LINE code coverage. Show test results, coverage percentage, and any failures with details.
+Run the RPGUnit test suite QTESTSRC/TART300 with *LINE code coverage. Show test results, coverage percentage, and any failures with details.
 ```
 
 **What to observe:**
@@ -189,7 +125,7 @@ Explain the failure and identify the correct expected value from the ART300 impl
 
 ---
 
-## Step 6: Run RPGUnit Test Plan creation and implementation Workflows
+## Part 2: Run RPGUnit Test Plan creation and implementation Workflows
 
 In the workflow list (local workspace scope) , select and run the appropriate workflows, using the information used in Step 2 to 5.
 
